@@ -15,7 +15,7 @@ onMount(() => {
 	<header>
 		<h1 transition:fly={{ y: -40, duration: 2000 }}>Dr Pulumi</h1>
 		<p transition:fade={{ duration: 1000, delay: 200 }}>
-			A long time ago, in the age when every infrastructure change required frantic button-clicking, there emerged a man, a legend: Dr. Pulumi. His brilliance and innovation would forever redefine the destiny of the Web Team.
+			A long time ago, in the age when every infrastructure change required frantic button-clicking, there emerged a man, a legend: Dr Pulumi. His brilliance and innovation would forever redefine the destiny of the Web Team.
 		</p>
 		<img
 			transition:fly={{ x: -1000, duration: 1000, delay: 0 }}
