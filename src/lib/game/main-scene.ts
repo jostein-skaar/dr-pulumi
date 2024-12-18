@@ -4,6 +4,8 @@ import Phaser, { type GameObjects } from "phaser";
 export class MainScene extends Phaser.Scene {
 	width!: number;
 	height!: number;
+	worldWidth!: number;
+	worldHeight!: number;
 	cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
 	hero!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 	enemyGroup!: Phaser.Physics.Arcade.Group;
@@ -11,6 +13,9 @@ export class MainScene extends Phaser.Scene {
 
 	settings = {
 		walkVelocity: adjustForPixelRatio(200),
+		tileSize: adjustForPixelRatio(32),
+		widthTileCount: 32,
+		heightTileCount: 32,
 	};
 
 	control = {
@@ -32,7 +37,11 @@ export class MainScene extends Phaser.Scene {
 		this.width = this.game.scale.gameSize.width;
 		this.height = this.game.scale.gameSize.height;
 
-		console.log("MainScene init", this.width, this.height);
+		this.worldWidth = this.settings.widthTileCount * this.settings.tileSize;
+		this.worldHeight = this.settings.heightTileCount * this.settings.tileSize;
+
+		console.log("MainScene init canvas size", this.width, this.height);
+		console.log("MainScene init world size", this.worldWidth, this.worldHeight);
 	}
 
 	preload(): void {
@@ -44,6 +53,23 @@ export class MainScene extends Phaser.Scene {
 	}
 
 	create(): void {
+		this.cameras.main.setBounds(0, 0, this.worldWidth, this.worldHeight);
+		this.physics.world.setBounds(0, 0, this.worldWidth, this.worldHeight);
+
+		const tiles = ["tiles-001.png", "tiles-002.png"];
+		const tileSize = this.settings.tileSize;
+		const rows = this.settings.heightTileCount;
+		const cols = this.settings.widthTileCount;
+
+		for (let row = 0; row < rows; row++) {
+			for (let col = 0; col < cols; col++) {
+				const tileKey = tiles[(row + col) % tiles.length];
+				this.add
+					.image(col * tileSize, row * tileSize, "sprites", tileKey)
+					.setOrigin(0, 0);
+			}
+		}
+
 		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		this.cursors = this.input.keyboard!.createCursorKeys();
 
@@ -65,6 +91,7 @@ export class MainScene extends Phaser.Scene {
 			.setDepth(1)
 			.setAlpha(this.cursorButtonAlpha)
 			.setInteractive()
+			.setScrollFactor(0)
 			.on("pointerdown", () => {
 				this.control.up = true;
 			})
@@ -84,6 +111,7 @@ export class MainScene extends Phaser.Scene {
 			.setDepth(1)
 			.setAlpha(this.cursorButtonAlpha)
 			.setInteractive()
+			.setScrollFactor(0)
 			.on("pointerdown", () => {
 				this.control.left = true;
 			})
@@ -103,6 +131,7 @@ export class MainScene extends Phaser.Scene {
 			.setDepth(1)
 			.setAlpha(this.cursorButtonAlpha)
 			.setInteractive()
+			.setScrollFactor(0)
 			.on("pointerdown", () => {
 				this.control.right = true;
 			})
@@ -122,6 +151,7 @@ export class MainScene extends Phaser.Scene {
 			.setDepth(1)
 			.setAlpha(this.cursorButtonAlpha)
 			.setInteractive()
+			.setScrollFactor(0)
 			.on("pointerdown", () => {
 				this.control.down = true;
 			})
@@ -198,6 +228,7 @@ export class MainScene extends Phaser.Scene {
 			repeat: -1,
 		});
 		this.hero.anims.play("stand", true);
+		this.cameras.main.startFollow(this.hero, true);
 
 		this.physics.add.collider(this.hero, this.platformGroup);
 		this.physics.add.collider(this.enemyGroup, this.platformGroup);
@@ -241,8 +272,8 @@ export class MainScene extends Phaser.Scene {
 
 	private resetHeroPosition() {
 		this.hero.setPosition(
-			this.scale.width / 2 - this.hero.width / 2,
-			this.scale.height / 2 - this.hero.height / 2,
+			this.worldWidth / 2 - this.hero.width / 2,
+			this.worldHeight / 2 - this.hero.height / 2,
 		);
 	}
 
