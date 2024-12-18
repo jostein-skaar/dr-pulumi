@@ -1,0 +1,52 @@
+name: CI
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - README.md
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: GitHub Tag Bump
+        uses: anothrNick/github-tag-action@v1
+        id: tagstep
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          DRY_RUN: false
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build app
+        run: pnpm build
+
+      - name: Replace version in files
+        uses: jostein-skaar/action-erstatninger@v1
+        with:
+          sok: '{VERSJON}'
+          erstatt: '${{steps.tagstep.outputs.tag}}'
+          filer: 'build/**/*.{js,html}'
+          dry-run: false
+
+      # Remember to change Settings->Actions->General->Workflow permissions: Read and write permissions
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build
+          publish_branch: www
+          cname: pulumi.fjaas.no
