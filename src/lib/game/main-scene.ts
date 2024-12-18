@@ -28,6 +28,8 @@ export class MainScene extends Phaser.Scene {
 	score = 0;
 	hasLost = false;
 	cursorButtonAlpha = 0.6;
+	minimap!: Phaser.Cameras.Scene2D.Camera;
+	backgroundLayer!: Phaser.Physics.Arcade.StaticGroup;
 
 	constructor() {
 		super("main-scene");
@@ -56,6 +58,20 @@ export class MainScene extends Phaser.Scene {
 		this.cameras.main.setBounds(0, 0, this.worldWidth, this.worldHeight);
 		this.physics.world.setBounds(0, 0, this.worldWidth, this.worldHeight);
 
+		this.minimap = this.cameras
+			.add(
+				this.width - adjustForPixelRatio(100),
+				0,
+				adjustForPixelRatio(100),
+				adjustForPixelRatio(100),
+			)
+			.setZoom(0.1)
+			.setOrigin(0, 0)
+			.setBackgroundColor(0xbf999999)
+			.setName("mini");
+		// this.minimap.setBackgroundColor(0x999999);
+
+		this.backgroundLayer = this.physics.add.staticGroup();
 		const tiles = ["tiles-001.png", "tiles-002.png"];
 		const tileSize = this.settings.tileSize;
 		const rows = this.settings.heightTileCount;
@@ -64,11 +80,12 @@ export class MainScene extends Phaser.Scene {
 		for (let row = 0; row < rows; row++) {
 			for (let col = 0; col < cols; col++) {
 				const tileKey = tiles[(row + col) % tiles.length];
-				this.add
-					.image(col * tileSize, row * tileSize, "sprites", tileKey)
+				this.backgroundLayer
+					.create(col * tileSize, row * tileSize, "sprites", tileKey)
 					.setOrigin(0, 0);
 			}
 		}
+		this.minimap.ignore(this.backgroundLayer);
 
 		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		this.cursors = this.input.keyboard!.createCursorKeys();
@@ -161,6 +178,10 @@ export class MainScene extends Phaser.Scene {
 			.on("pointerup", () => {
 				this.control.down = false;
 			});
+		this.minimap.ignore(buttonUp);
+		this.minimap.ignore(buttonLeft);
+		this.minimap.ignore(buttonRight);
+		this.minimap.ignore(buttonDown);
 
 		const hideCursorButtons = () => {
 			if (this.cursorButtonAlpha > 0) {
