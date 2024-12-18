@@ -56,12 +56,6 @@ reloadWhenResize(window);
 </div>
 
 <style>
-	@media only screen and (max-width: 600px) {
-		:global(body) {
-			background-color: #f7f7f7;
-		}
-	}
-
 	.game-container {
 		container-type: size;
 		container-name: game-container;
