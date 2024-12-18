@@ -1,0 +1,1 @@
+.game-container.svelte-pdgjwx{container-type:size;container-name:game-container;display:flex;justify-content:center;align-items:center;height:100vh;height:100svh}#game.svelte-pdgjwx{text-align:center;max-width:800px;max-height:600px}@container game-container (min-width: 820px) and (min-height: 620px){#game.svelte-pdgjwx{align-items:center;box-sizing:content-box}}
