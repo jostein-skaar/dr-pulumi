@@ -4,8 +4,8 @@
 			"image": "sprites@3.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 850,
-				"h": 194
+				"w": 196,
+				"h": 944
 			},
 			"scale": 0.75,
 			"frames": [
@@ -31,27 +31,6 @@
 					}
 				},
 				{
-					"filename": "hero-002.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 192,
-						"h": 192
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 192,
-						"h": 192
-					},
-					"frame": {
-						"x": 195,
-						"y": 1,
-						"w": 192,
-						"h": 192
-					}
-				},
-				{
 					"filename": "hero-003.png",
 					"rotated": false,
 					"trimmed": false,
@@ -66,31 +45,94 @@
 						"h": 192
 					},
 					"frame": {
-						"x": 389,
-						"y": 1,
+						"x": 1,
+						"y": 195,
 						"w": 192,
 						"h": 192
 					}
 				},
 				{
-					"filename": "hero-004.png",
+					"filename": "hero-002.png",
 					"rotated": false,
-					"trimmed": false,
+					"trimmed": true,
 					"sourceSize": {
 						"w": 192,
 						"h": 192
 					},
 					"spriteSourceSize": {
 						"x": 0,
-						"y": 0,
+						"y": 2,
+						"w": 192,
+						"h": 190
+					},
+					"frame": {
+						"x": 1,
+						"y": 389,
+						"w": 192,
+						"h": 190
+					}
+				},
+				{
+					"filename": "hero-004.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
 						"w": 192,
 						"h": 192
 					},
-					"frame": {
-						"x": 583,
-						"y": 1,
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 2,
 						"w": 192,
-						"h": 192
+						"h": 190
+					},
+					"frame": {
+						"x": 1,
+						"y": 581,
+						"w": 192,
+						"h": 190
+					}
+				},
+				{
+					"filename": "tiles-001.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 96,
+						"h": 96
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 96,
+						"h": 96
+					},
+					"frame": {
+						"x": 1,
+						"y": 773,
+						"w": 96,
+						"h": 96
+					}
+				},
+				{
+					"filename": "tiles-002.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 96,
+						"h": 96
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 96,
+						"h": 96
+					},
+					"frame": {
+						"x": 99,
+						"y": 773,
+						"w": 96,
+						"h": 96
 					}
 				},
 				{
@@ -108,8 +150,8 @@
 						"h": 72
 					},
 					"frame": {
-						"x": 777,
-						"y": 1,
+						"x": 1,
+						"y": 871,
 						"w": 72,
 						"h": 72
 					}
@@ -120,6 +162,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:f42a005980b32bbfdb5a1441d2c78db6:174b1063989398ee486577fa7e635566:4a9bf2ba9afc2827dfa178a3fc41fa73$"
+		"smartupdate": "$TexturePacker:SmartUpdate:b02d3cf85bc970b8f7315c15af01e99b:188e0acfb6276f742a9d0c65c4b04e6a:4a9bf2ba9afc2827dfa178a3fc41fa73$"
 	}
 }
