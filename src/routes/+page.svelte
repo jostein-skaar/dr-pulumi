@@ -1,21 +1,27 @@
 <script lang="ts">
-import { fade, fly } from "svelte/transition";
-import drPulumiImage from "$lib/images/dr-pulumi.png";
-import { onMount } from "svelte";
+	import { preloadCode, preloadData } from '$app/navigation';
+	import { fade, fly } from 'svelte/transition';
+	import drPulumiImage from '$lib/images/dr-pulumi.png';
+	import { onMount } from 'svelte';
 
-// const rank = localStorage.getItem("drpulumi-rank") || "Pulumi Noob";
+	// const rank = localStorage.getItem("drpulumi-rank") || "Pulumi Noob";
 
-let visible = false;
-onMount(() => {
-	visible = true;
-});
+	let visible = false;
+	onMount(() => {
+		visible = true;
+	});
+
+	// This loads the game on the home page
+	// preloadCode('/game');
 </script>
 
 {#if visible}
 	<header>
 		<h1 transition:fly={{ y: -40, duration: 2000 }}>Dr Pulumi</h1>
 		<p transition:fade={{ duration: 1000, delay: 200 }}>
-			A long time ago, in the age when every infrastructure change required frantic button-clicking, there emerged a man, a legend: Dr Pulumi. His brilliance and innovation would forever redefine the destiny of the Web Team.
+			A long time ago, in the age when every infrastructure change required frantic button-clicking,
+			there emerged a man, a legend: Dr Pulumi. His brilliance and innovation would forever redefine
+			the destiny of the Web Team.
 		</p>
 		<img
 			transition:fly={{ x: -1000, duration: 1000, delay: 0 }}

@@ -15,7 +15,9 @@ export class MainScene extends Phaser.Scene {
 		walkVelocity: adjustForPixelRatio(200),
 		tileSize: adjustForPixelRatio(32),
 		widthTileCount: 32,
-		heightTileCount: 32,
+		heightTileCount: 32,	
+		slackingTime: 5000,
+		warningTime: 2500,
 	};
 
 	control = {
@@ -23,6 +25,7 @@ export class MainScene extends Phaser.Scene {
 		left: false,
 		right: false,
 		down: false,
+		shoot: false
 	};
 
 	score = 0;
@@ -30,6 +33,16 @@ export class MainScene extends Phaser.Scene {
 	cursorButtonAlpha = 0.6;
 	minimap!: Phaser.Cameras.Scene2D.Camera;
 	backgroundLayer!: Phaser.Physics.Arcade.StaticGroup;
+	allowSlacking = true;
+	startStopTimer = false;
+	hasStopped = false;
+	timeSinceStopped = 0;
+	isSlacking = false;	
+	slackingInterval = 0;
+	losingText!: GameObjects.Text;
+	scoreText!: GameObjects.Text;
+
+
 
 	constructor() {
 		super("main-scene");
@@ -44,14 +57,6 @@ export class MainScene extends Phaser.Scene {
 
 		console.log("MainScene init canvas size", this.width, this.height);
 		console.log("MainScene init world size", this.worldWidth, this.worldHeight);
-	}
-
-	preload(): void {
-		this.load.multiatlas(
-			"sprites",
-			`/assets/sprites@${adjustForPixelRatio(1)}.json?v={VERSJON}`,
-			"/assets",
-		);
 	}
 
 	create(): void {
@@ -91,12 +96,14 @@ export class MainScene extends Phaser.Scene {
 		this.cursors = this.input.keyboard!.createCursorKeys();
 
 		const upPositionX = this.width - adjustForPixelRatio(145);
-		const upPositionY = this.height - adjustForPixelRatio(158);
+		const upPositionY = this.height - adjustForPixelRatio(200);
 		const leftRightPositionY = upPositionY + adjustForPixelRatio(56);
 		const leftPositionX = upPositionX - adjustForPixelRatio(58);
 		const rightPositionX = upPositionX + adjustForPixelRatio(58);
 		const downPositionX = upPositionX;
-		const downPositionY = upPositionY + adjustForPixelRatio(56);
+		const downPositionY = upPositionY + adjustForPixelRatio(56*2);
+		const shootPositionX = upPositionX;
+		const shootPositionY = upPositionY + adjustForPixelRatio(56);
 		const fontSizeCursorButtons = `${adjustForPixelRatio(54)}px`;
 
 		const buttonUp = this.add
@@ -111,6 +118,7 @@ export class MainScene extends Phaser.Scene {
 			.setScrollFactor(0)
 			.on("pointerdown", () => {
 				this.control.up = true;
+				this.allowSlacking = false;
 			})
 			.on("pointerout", () => {
 				this.control.up = false;
@@ -131,6 +139,7 @@ export class MainScene extends Phaser.Scene {
 			.setScrollFactor(0)
 			.on("pointerdown", () => {
 				this.control.left = true;
+				this.allowSlacking = false;
 			})
 			.on("pointerout", () => {
 				this.control.left = false;
@@ -151,12 +160,35 @@ export class MainScene extends Phaser.Scene {
 			.setScrollFactor(0)
 			.on("pointerdown", () => {
 				this.control.right = true;
+				this.allowSlacking = false;
 			})
 			.on("pointerout", () => {
 				this.control.right = false;
 			})
 			.on("pointerup", () => {
 				this.control.right = false;
+			});
+
+
+		const buttonShoot = this.add
+			.text(shootPositionX, shootPositionY, "⚡", {
+				padding: { x: adjustForPixelRatio(5), y: adjustForPixelRatio(5) },
+				fontSize: fontSizeCursorButtons,
+				color: "#222",
+			})
+			.setDepth(1)
+			.setAlpha(this.cursorButtonAlpha)
+			.setInteractive()
+			.setScrollFactor(0)
+			.on("pointerdown", () => {
+				this.control.shoot = true;
+				this.allowSlacking = false;
+			})
+			.on("pointerout", () => {
+				this.control.shoot = false;
+			})
+			.on("pointerup", () => {
+				this.control.shoot = false;
 			});
 
 		const buttonDown = this.add
@@ -171,6 +203,7 @@ export class MainScene extends Phaser.Scene {
 			.setScrollFactor(0)
 			.on("pointerdown", () => {
 				this.control.down = true;
+				this.allowSlacking = false;
 			})
 			.on("pointerout", () => {
 				this.control.down = false;
@@ -182,6 +215,7 @@ export class MainScene extends Phaser.Scene {
 		this.minimap.ignore(buttonLeft);
 		this.minimap.ignore(buttonRight);
 		this.minimap.ignore(buttonDown);
+		this.minimap.ignore(buttonShoot);
 
 		const hideCursorButtons = () => {
 			if (this.cursorButtonAlpha > 0) {
@@ -190,12 +224,14 @@ export class MainScene extends Phaser.Scene {
 				buttonLeft.setAlpha(this.cursorButtonAlpha);
 				buttonRight.setAlpha(this.cursorButtonAlpha);
 				buttonDown.setAlpha(this.cursorButtonAlpha);
+				buttonShoot.setAlpha(this.cursorButtonAlpha);
 			}
 		};
 
 		this.cursors.up.onDown = () => {
 			this.control.up = true;
 			hideCursorButtons();
+			this.allowSlacking = false;
 		};
 		this.cursors.up.onUp = () => {
 			this.control.up = false;
@@ -204,6 +240,7 @@ export class MainScene extends Phaser.Scene {
 		this.cursors.left.onDown = () => {
 			this.control.left = true;
 			hideCursorButtons();
+			this.allowSlacking = false;
 		};
 		this.cursors.left.onUp = () => {
 			this.control.left = false;
@@ -211,6 +248,7 @@ export class MainScene extends Phaser.Scene {
 		this.cursors.right.onDown = () => {
 			this.control.right = true;
 			hideCursorButtons();
+			this.allowSlacking = false;
 		};
 		this.cursors.right.onUp = () => {
 			this.control.right = false;
@@ -219,9 +257,19 @@ export class MainScene extends Phaser.Scene {
 		this.cursors.down.onDown = () => {
 			this.control.down = true;
 			hideCursorButtons();
+			this.allowSlacking = false;
 		};
 		this.cursors.down.onUp = () => {
 			this.control.down = false;
+		};
+
+		this.cursors.space.onDown = () => {
+			this.control.shoot = true;
+			hideCursorButtons();
+			this.allowSlacking = false;
+		};
+		this.cursors.space.onUp = () => {
+			this.control.shoot = false;
 		};
 
 		this.enemyGroup = this.physics.add.group({
@@ -262,6 +310,44 @@ export class MainScene extends Phaser.Scene {
 				this.killEnemy(enemy);
 			},
 		);
+
+		this.losingText = this.add
+		.text(this.width / 2, this.height / 4, 'HEY!\nFix the\nproblems!', {
+			fontSize: `${adjustForPixelRatio(40)}px`,
+			color: '#ff6600',
+			fontStyle: 'bold',
+			align: 'center'
+		})
+		.setOrigin(0.5, 0.5)
+		.setDepth(1)
+		.setScrollFactor(0)
+		.setVisible(false);
+	this.minimap.ignore(this.losingText);
+
+	this.tweens.add({
+		targets: this.losingText,
+		// x: this.bredde,
+		scale: 0.9,
+		ease: 'Elastic',
+		duration: 250,
+		yoyo: true,
+		repeat: -1
+	});
+
+	this.scoreText = this.add
+	.text(adjustForPixelRatio(10), adjustForPixelRatio(20), '', {
+		fontSize: adjustForPixelRatio(20) + 'px',
+		color: '#ff6600',
+		backgroundColor: '#f7f7f7',
+		padding: { x: adjustForPixelRatio(5), y: adjustForPixelRatio(5) },
+	})
+	.setDepth(1)
+	.setScrollFactor(0);
+	this.minimap.ignore(this.scoreText);
+
+	this.hasLost = false;
+	this.score = 0;
+	this.timeSinceStopped = 0;
 	}
 
 	update(_time: number, delta: number): void {
@@ -269,24 +355,75 @@ export class MainScene extends Phaser.Scene {
 			this.hero.setVelocityX(-this.settings.walkVelocity);
 			this.hero.setVelocityY(0);
 			this.hero.setAngle(90);
+			this.hasStopped = false;
 		} else if (this.control.right) {
 			this.hero.setVelocityX(this.settings.walkVelocity);
 			this.hero.setVelocityY(0);
 			this.hero.setAngle(-90);
+			this.hasStopped = false;
 		} else if (this.control.up) {
 			this.hero.setVelocityX(0);
 			this.hero.setVelocityY(-this.settings.walkVelocity);
 			this.hero.setAngle(180);
+			this.hasStopped = false;
 		} else if (this.control.down) {
 			this.hero.setVelocityX(0);
 			this.hero.setVelocityY(this.settings.walkVelocity);
 			this.hero.setAngle(0);
-		} else {
+			this.hasStopped = false;
+		} 
+		else if (this.control.shoot) {			
+			console.log("shoot");
+			this.hasStopped = false;
+		}
+		else {
 			this.hero.setVelocityX(0);
 			this.hero.setVelocityY(0);
+			this.hasStopped = true;
 		}
 
-		// if () {
+		if (this.hasStopped === false) {
+			this.startStopTimer = true;
+		}
+
+		if (this.allowSlacking) {
+			this.timeSinceStopped = 0;
+		}
+
+		if (this.startStopTimer && this.hasStopped) {
+			this.timeSinceStopped += delta;
+		} else {
+			this.timeSinceStopped = 0;
+		}
+
+		if (this.timeSinceStopped > this.settings.slackingTime) {
+			this.lose();
+			if(this.slackingInterval === 0)
+			{
+				console.log("START spawn enemies interval")
+				this.slackingInterval = setInterval(() => {
+					console.log("Spawn enemies interval", this.slackingInterval)
+				}, 1000);
+			}			
+		}
+		else {
+			if(this.slackingInterval !== 0) {
+				clearInterval(this.slackingInterval);
+				this.slackingInterval = 0;
+				console.log("STOP spawn enemies interval")
+			}
+		}
+
+		if (this.timeSinceStopped > this.settings.warningTime) {
+			this.losingText.setVisible(true);
+		} else {
+			this.losingText.setVisible(false);
+		}
+		
+		const text = `Fixed: ${this.score}\nRemaining: ${10000}`;
+		this.scoreText.setText(text);
+
+		// if (_time > 6000) {
 		// 	this.lose();
 		// }
 	}
@@ -318,12 +455,14 @@ export class MainScene extends Phaser.Scene {
 		if (this.hasLost) {
 			return;
 		}
+
 		this.hasLost = true;
 		this.scene.pause();
+		this.hero.setTint(0xff0000);
 		this.cameras.main.setBackgroundColor(0xbababa);
-		// this.cameras.main.setAlpha(0.5);
-		setTimeout(() => {
-			window.location.href = "/lose";
-		}, 1200);
+		this.cameras.main.setAlpha(0.5);
+		this.losingText.setVisible(false);
+
+		this.scene.launch('lost-scene');
 	}
 }
