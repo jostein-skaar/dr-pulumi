@@ -19,7 +19,7 @@ export class LostScene extends Phaser.Scene {
 		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		this.cursors = this.input.keyboard!.createCursorKeys();
 
-		const tekst = "Too many problems!\nTap to try again\n(Wait to go home)";
+		const tekst = "Too many problems!\nTap to try again\n(Wait to quit)";
 		this.add
 			.text(this.width / 2, this.height / 2, tekst, {
 				fontFamily: "arial",

@@ -16,9 +16,10 @@ export class MainScene extends Phaser.Scene {
 		tileSize: adjustForPixelRatio(32),
 		widthTileCount: 32,
 		heightTileCount: 32,
-		slackingTime: 5000,
-		warningTime: 2500,
-		maxEnemies: 10000,
+		slackingTime: 3000,
+		warningTime: 2000,
+		enemySpawnInterval: 500,
+		maxEnemies: 1000,
 		minimapSize: adjustForPixelRatio((32 * 32) / 10),
 		minimapZoom: 0.1,
 		bulletSpeed: adjustForPixelRatio(400),
@@ -370,11 +371,13 @@ export class MainScene extends Phaser.Scene {
 		this.control.shoot = false;
 
 		setTimeout(() => {
+			// SPawn first enemy in front of hero after 1 second
 			this.spawnNewEnemy(true);
 
+			// Start spawning enemies in random positions
 			setInterval(() => {
 				this.spawnNewEnemy(false);
-			}, 200);
+			}, this.settings.enemySpawnInterval);
 		}, 1000);
 	}
 
@@ -438,18 +441,17 @@ export class MainScene extends Phaser.Scene {
 		}
 
 		if (this.timeSinceStopped > this.settings.slackingTime) {
-			this.lose();
 			if (this.slackingInterval === 0) {
-				console.log("start spawn enemies interval");
+				console.log("start double enemies interval");
 				this.slackingInterval = setInterval(() => {
-					console.log("Spawn enemies interval", this.slackingInterval);
+					this.increaseEnemies();
 				}, 1000);
 			}
 		} else {
 			if (this.slackingInterval !== 0) {
 				clearInterval(this.slackingInterval);
 				this.slackingInterval = 0;
-				console.log("stop spawn enemies interval");
+				console.log("stop double enemies interval");
 			}
 		}
 
@@ -507,6 +509,13 @@ export class MainScene extends Phaser.Scene {
 			return;
 		}
 
+		if (this.slackingInterval !== 0) {
+			clearInterval(this.slackingInterval);
+		}
+		if (this.shootingInterval !== 0) {
+			clearInterval(this.shootingInterval);
+		}
+
 		this.hasLost = true;
 		this.scene.pause();
 		this.hero.setTint(0xff0000);
@@ -518,20 +527,25 @@ export class MainScene extends Phaser.Scene {
 	}
 
 	private spawnNewEnemy(isFirst = false) {
-		for (let i = 0; i < 10; i++) {
-			let enemy: Phaser.Physics.Arcade.Image = this.enemyGroup.getFirstDead();
+		let enemy: Phaser.Physics.Arcade.Image = this.enemyGroup.getFirstDead();
 
-			const x = isFirst ? this.hero.x : Phaser.Math.Between(0, this.worldWidth);
-			const y = isFirst
-				? this.hero.y - this.hero.height * 3
-				: Phaser.Math.Between(0, this.worldHeight);
+		const x = isFirst ? this.hero.x : Phaser.Math.Between(0, this.worldWidth);
+		const y = isFirst
+			? this.hero.y - this.hero.height * 3
+			: Phaser.Math.Between(0, this.worldHeight);
 
-			if (enemy) {
-				enemy.enableBody(true, x, y, true, true);
-			} else {
-				enemy = this.enemyGroup.create(x, y, "sprites", "enemies-001.png");
-				enemy.setCollideWorldBounds(true);
-			}
+		if (enemy) {
+			enemy.enableBody(true, x, y, true, true);
+		} else {
+			enemy = this.enemyGroup.create(x, y, "sprites", "enemies-001.png");
+			enemy.setCollideWorldBounds(true);
+		}
+	}
+
+	private increaseEnemies() {
+		const newEnemiesToSpawn = Math.ceil(this.enemyGroup.countActive() * 0.25);
+		for (let i = 0; i < newEnemiesToSpawn; i++) {
+			this.spawnNewEnemy(false);
 		}
 	}
 
