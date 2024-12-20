@@ -4,8 +4,8 @@
 			"image": "sprites@2.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 130,
-				"h": 650
+				"w": 652,
+				"h": 130
 			},
 			"scale": 0.5,
 			"frames": [
@@ -45,8 +45,8 @@
 						"h": 128
 					},
 					"frame": {
-						"x": 1,
-						"y": 131,
+						"x": 131,
+						"y": 1,
 						"w": 128,
 						"h": 128
 					}
@@ -66,8 +66,8 @@
 						"h": 127
 					},
 					"frame": {
-						"x": 1,
-						"y": 261,
+						"x": 261,
+						"y": 1,
 						"w": 128,
 						"h": 127
 					}
@@ -87,8 +87,8 @@
 						"h": 127
 					},
 					"frame": {
-						"x": 1,
-						"y": 390,
+						"x": 391,
+						"y": 1,
 						"w": 128,
 						"h": 127
 					}
@@ -108,29 +108,8 @@
 						"h": 64
 					},
 					"frame": {
-						"x": 1,
-						"y": 519,
-						"w": 64,
-						"h": 64
-					}
-				},
-				{
-					"filename": "tiles-002.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 64,
-						"h": 64
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 64,
-						"h": 64
-					},
-					"frame": {
-						"x": 1,
-						"y": 585,
+						"x": 521,
+						"y": 1,
 						"w": 64,
 						"h": 64
 					}
@@ -150,10 +129,52 @@
 						"h": 48
 					},
 					"frame": {
-						"x": 67,
-						"y": 519,
+						"x": 521,
+						"y": 67,
 						"w": 48,
 						"h": 48
+					}
+				},
+				{
+					"filename": "bullet-001.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 48,
+						"h": 48
+					},
+					"spriteSourceSize": {
+						"x": 6,
+						"y": 4,
+						"w": 36,
+						"h": 40
+					},
+					"frame": {
+						"x": 571,
+						"y": 67,
+						"w": 36,
+						"h": 40
+					}
+				},
+				{
+					"filename": "tiles-002.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 64,
+						"h": 64
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 64,
+						"h": 64
+					},
+					"frame": {
+						"x": 587,
+						"y": 1,
+						"w": 64,
+						"h": 64
 					}
 				}
 			]
@@ -162,6 +183,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:f79301c996e0d65c30de3add96cf1d57:2900deb8798da82aeab8b53531dc285b:4a9bf2ba9afc2827dfa178a3fc41fa73$"
+		"smartupdate": "$TexturePacker:SmartUpdate:45907739014e2c2388ff1c7fa2f2ab9e:aa90b2f96d149992831bf6142f00be2f:4a9bf2ba9afc2827dfa178a3fc41fa73$"
 	}
 }
