@@ -9,15 +9,17 @@ export class MainScene extends Phaser.Scene {
 	cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
 	hero!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 	enemyGroup!: Phaser.Physics.Arcade.Group;
-	platformGroup!: Phaser.Physics.Arcade.StaticGroup;
 
 	settings = {
 		walkVelocity: adjustForPixelRatio(200),
 		tileSize: adjustForPixelRatio(32),
 		widthTileCount: 32,
-		heightTileCount: 32,	
+		heightTileCount: 32,
 		slackingTime: 5000,
 		warningTime: 2500,
+		maxEnemies: 10000,
+		minimapSize: adjustForPixelRatio((32 * 32) / 10),
+		minimapZoom: 0.1,
 	};
 
 	control = {
@@ -25,7 +27,7 @@ export class MainScene extends Phaser.Scene {
 		left: false,
 		right: false,
 		down: false,
-		shoot: false
+		shoot: false,
 	};
 
 	score = 0;
@@ -37,12 +39,10 @@ export class MainScene extends Phaser.Scene {
 	startStopTimer = false;
 	hasStopped = false;
 	timeSinceStopped = 0;
-	isSlacking = false;	
+	isSlacking = false;
 	slackingInterval = 0;
 	losingText!: GameObjects.Text;
 	scoreText!: GameObjects.Text;
-
-
 
 	constructor() {
 		super("main-scene");
@@ -65,12 +65,12 @@ export class MainScene extends Phaser.Scene {
 
 		this.minimap = this.cameras
 			.add(
-				this.width - adjustForPixelRatio(100),
+				this.width - this.settings.minimapSize,
 				0,
-				adjustForPixelRatio(100),
-				adjustForPixelRatio(100),
+				this.settings.minimapSize,
+				this.settings.minimapSize,
 			)
-			.setZoom(0.1)
+			.setZoom(this.settings.minimapZoom)
 			.setOrigin(0, 0)
 			.setBackgroundColor(0xbf999999)
 			.setName("mini");
@@ -101,7 +101,7 @@ export class MainScene extends Phaser.Scene {
 		const leftPositionX = upPositionX - adjustForPixelRatio(58);
 		const rightPositionX = upPositionX + adjustForPixelRatio(58);
 		const downPositionX = upPositionX;
-		const downPositionY = upPositionY + adjustForPixelRatio(56*2);
+		const downPositionY = upPositionY + adjustForPixelRatio(56 * 2);
 		const shootPositionX = upPositionX;
 		const shootPositionY = upPositionY + adjustForPixelRatio(56);
 		const fontSizeCursorButtons = `${adjustForPixelRatio(54)}px`;
@@ -168,7 +168,6 @@ export class MainScene extends Phaser.Scene {
 			.on("pointerup", () => {
 				this.control.right = false;
 			});
-
 
 		const buttonShoot = this.add
 			.text(shootPositionX, shootPositionY, "⚡", {
@@ -272,19 +271,14 @@ export class MainScene extends Phaser.Scene {
 			this.control.shoot = false;
 		};
 
-		this.enemyGroup = this.physics.add.group({
-			allowGravity: false,
-		});
-		this.platformGroup = this.physics.add.staticGroup();
+		this.enemyGroup = this.physics.add.group();
 
-		this.addPlatforms();
 		this.addEnemies();
 
 		this.hero = this.physics.add.sprite(0, 0, "sprites", "hero-001.png");
 		this.resetHeroPosition();
 		this.hero.setCollideWorldBounds(true);
 		console.log("hero", this.hero.height, this.hero.width);
-
 
 		this.hero.anims.create({
 			key: "stand",
@@ -300,8 +294,8 @@ export class MainScene extends Phaser.Scene {
 		this.hero.anims.play("stand", true);
 		this.cameras.main.startFollow(this.hero, true);
 
-		this.physics.add.collider(this.hero, this.platformGroup);
-		this.physics.add.collider(this.enemyGroup, this.platformGroup);
+		// // Fun, but to
+		// this.physics.add.collider(this.enemyGroup, this.enemyGroup);
 		this.physics.add.collider(this.enemyGroup, this.hero);
 
 		// this.physics.add.overlap(
@@ -314,46 +308,55 @@ export class MainScene extends Phaser.Scene {
 		// );
 
 		this.losingText = this.add
-		.text(this.width / 2, this.height / 4, 'HEY!\nFix the\nproblems!', {
-			fontSize: `${adjustForPixelRatio(40)}px`,
-			color: '#ff6600',
-			fontStyle: 'bold',
-			align: 'center'
-		})
-		.setOrigin(0.5, 0.5)
-		.setDepth(1)
-		.setScrollFactor(0)
-		.setVisible(false);
-	this.minimap.ignore(this.losingText);
+			.text(this.width / 2, this.height / 4, "HEY!\nFix the\nproblems!", {
+				fontSize: `${adjustForPixelRatio(40)}px`,
+				color: "#ff6600",
+				fontStyle: "bold",
+				align: "center",
+			})
+			.setOrigin(0.5, 0.5)
+			.setDepth(1)
+			.setScrollFactor(0)
+			.setVisible(false);
+		this.minimap.ignore(this.losingText);
 
-	this.tweens.add({
-		targets: this.losingText,
-		// x: this.bredde,
-		scale: 0.9,
-		ease: 'Elastic',
-		duration: 250,
-		yoyo: true,
-		repeat: -1
-	});
+		this.tweens.add({
+			targets: this.losingText,
+			// x: this.bredde,
+			scale: 0.9,
+			ease: "Elastic",
+			duration: 250,
+			yoyo: true,
+			repeat: -1,
+		});
 
-	this.scoreText = this.add
-	.text(adjustForPixelRatio(10), adjustForPixelRatio(20), '', {
-		fontSize: adjustForPixelRatio(20) + 'px',
-		color: '#ff6600',
-		backgroundColor: '#f7f7f7',
-		padding: { x: adjustForPixelRatio(5), y: adjustForPixelRatio(5) },
-	})
-	.setDepth(1)
-	.setScrollFactor(0);
-	this.minimap.ignore(this.scoreText);
+		this.scoreText = this.add
+			.text(0, 0, "", {
+				fontSize: `${adjustForPixelRatio(20)}px`,
+				color: "#ff6600",
+				backgroundColor: "#DDDDDDbf",
+				padding: { x: adjustForPixelRatio(10), y: adjustForPixelRatio(10) },
+			})
+			.setDepth(1)
+			.setScrollFactor(0);
+		this.minimap.ignore(this.scoreText);
 
-	this.hasLost = false;
-	this.score = 0;
-	this.timeSinceStopped = 0;
+		this.hasLost = false;
+		this.score = 0;
+		this.timeSinceStopped = 0;
+		this.control.down = false;
+		this.control.up = false;
+		this.control.left = false;
+		this.control.right = false;
+		this.control.shoot = false;
 
-	setInterval(() => {
-		this.spawnNewEnemy(true);
-	}, 2000);
+		setTimeout(() => {
+			this.spawnNewEnemy(true);
+
+			setInterval(() => {
+				this.spawnNewEnemy(false);
+			}, 200);
+		}, 1000);
 	}
 
 	update(_time: number, delta: number): void {
@@ -377,12 +380,10 @@ export class MainScene extends Phaser.Scene {
 			this.hero.setVelocityY(this.settings.walkVelocity);
 			this.hero.setAngle(0);
 			this.hasStopped = false;
-		} 
-		else if (this.control.shoot) {			
+		} else if (this.control.shoot) {
 			console.log("shoot");
 			this.hasStopped = false;
-		}
-		else {
+		} else {
 			this.hero.setVelocityX(0);
 			this.hero.setVelocityY(0);
 			this.hasStopped = true;
@@ -404,19 +405,17 @@ export class MainScene extends Phaser.Scene {
 
 		if (this.timeSinceStopped > this.settings.slackingTime) {
 			this.lose();
-			if(this.slackingInterval === 0)
-			{
-				console.log("START spawn enemies interval")
+			if (this.slackingInterval === 0) {
+				console.log("START spawn enemies interval");
 				this.slackingInterval = setInterval(() => {
-					console.log("Spawn enemies interval", this.slackingInterval)
+					console.log("Spawn enemies interval", this.slackingInterval);
 				}, 1000);
-			}			
-		}
-		else {
-			if(this.slackingInterval !== 0) {
+			}
+		} else {
+			if (this.slackingInterval !== 0) {
 				clearInterval(this.slackingInterval);
 				this.slackingInterval = 0;
-				console.log("STOP spawn enemies interval")
+				console.log("STOP spawn enemies interval");
 			}
 		}
 
@@ -425,24 +424,22 @@ export class MainScene extends Phaser.Scene {
 		} else {
 			this.losingText.setVisible(false);
 		}
-		
-		const text = `Fixed: ${this.score}\nRemaining: ${10000}`;
-		this.scoreText.setText(text);
 
-		// if (_time > 6000) {
-		// 	this.lose();
-		// }
+		const unsolvedProblems = this.enemyGroup.countActive();
+		if (unsolvedProblems > this.settings.maxEnemies) {
+			this.lose();
+		}
+		const text = `Fixed: ${this.score}\nRemaining: ${unsolvedProblems}`;
+		this.scoreText.setText(text);
 	}
 
 	private resetHeroPosition() {
-		this.hero.setPosition(
-			this.worldWidth / 2 - this.hero.width / 2,
-			this.worldHeight / 2 - this.hero.height / 2,
-		).setAngle(180);
-	}
-
-	private addPlatforms() {
-		this.platformGroup.clear(true, true);
+		this.hero
+			.setPosition(
+				this.worldWidth / 2 - this.hero.width / 2,
+				this.worldHeight / 2 - this.hero.height / 2,
+			)
+			.setAngle(180);
 	}
 
 	private async addEnemies() {
@@ -469,21 +466,24 @@ export class MainScene extends Phaser.Scene {
 		this.cameras.main.setAlpha(0.5);
 		this.losingText.setVisible(false);
 
-		this.scene.launch('lost-scene');
+		this.scene.launch("lost-scene");
 	}
 
 	private spawnNewEnemy(isFirst = false) {
-		let enemy: Phaser.Physics.Arcade.Image = this.enemyGroup.getFirstDead();
-		const x = this.hero.x;
-		const y = this.hero.y - this.hero.height*3;
-		if(enemy) {
-			enemy.enableBody(true, x, y, true, true);
-		}
-		else {
-			enemy = this.enemyGroup.create(x, y, 'sprites', 'enemies-001.png');
-		enemy.setCollideWorldBounds(true);
-		}
+		for (let i = 0; i < 10; i++) {
+			let enemy: Phaser.Physics.Arcade.Image = this.enemyGroup.getFirstDead();
 
-		
+			const x = isFirst ? this.hero.x : Phaser.Math.Between(0, this.worldWidth);
+			const y = isFirst
+				? this.hero.y - this.hero.height * 3
+				: Phaser.Math.Between(0, this.worldHeight);
+
+			if (enemy) {
+				enemy.enableBody(true, x, y, true, true);
+			} else {
+				enemy = this.enemyGroup.create(x, y, "sprites", "enemies-001.png");
+				enemy.setCollideWorldBounds(true);
+			}
+		}
 	}
 }
