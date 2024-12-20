@@ -42,7 +42,6 @@ export class LostScene extends Phaser.Scene {
 				this.scene.start("main-scene");
 			});
 			this.cursors.space.onDown = () => {
-				console.log("restart");
 				clearTimeout(goToHomeTimeout);
 				this.scene.start("main-scene");
 			};

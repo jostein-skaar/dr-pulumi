@@ -23,16 +23,36 @@
      inkscape:pagecheckerboard="true"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="px"
-     inkscape:zoom="11.313708"
-     inkscape:cx="70.975843"
-     inkscape:cy="201.12769"
+     inkscape:zoom="3.9999998"
+     inkscape:cx="34.625001"
+     inkscape:cy="216.37501"
      inkscape:window-width="2560"
      inkscape:window-height="1369"
      inkscape:window-x="1912"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer2" /><defs
+     inkscape:current-layer="layer3" /><defs
      id="defs1"><rect
+       x="29.875001"
+       y="149.75001"
+       width="38.750002"
+       height="39.250002"
+       id="rect67" /><rect
+       x="52.856232"
+       y="158.39192"
+       width="14.672466"
+       height="18.384776"
+       id="rect419" /><rect
+       x="3.7123106"
+       y="152.55829"
+       width="16.617009"
+       height="17.854446"
+       id="rect416" /><rect
+       x="3.5355339"
+       y="152.73506"
+       width="19.445437"
+       height="20.152543"
+       id="rect415" /><rect
        x="15.733126"
        y="72.21328"
        width="42.426407"
@@ -91,7 +111,40 @@
            cx="183.33292"
            cy="114.06949"
            rx="2.3489223"
-           ry="2.3488669" /></g></g></g><g
+           ry="2.3488669" /></g></g><g
+       id="g34-6"
+       transform="translate(-0.75,-50.75)"
+       inkscape:label="bullet"
+       style="display:inline"><g
+         id="g6-5-4"
+         inkscape:label="tile-light"
+         transform="matrix(0.75,0,0,0.75,0,200)"
+         style="display:inline;fill:#f2f2f2;stroke-width:1.33333"><rect
+           style="fill:#ffffff;fill-opacity:0;stroke-width:1.25001"
+           id="rect1-4-6-4"
+           width="32"
+           height="32"
+           x="1"
+           y="1" /></g><path
+         style="font-weight:900;font-size:10.6667px;line-height:1;font-family:Arial;-inkscape-font-specification:'Arial Heavy';white-space:pre;display:none;fill:#ff6600;fill-opacity:1;stroke-width:4.99999"
+         d="m 11.723724,203.64963 v 3.10607 h -0.426138 q -0.596592,0 -0.899623,0.25568 -0.293562,0.24621 -0.4166673,0.76705 -0.066288,0.28409 -0.07576,1.5625 -0.00948,1.26895 -0.2651515,1.99811 -0.1893946,0.55871 -0.539775,0.89962 -0.2651523,0.25569 -0.8712146,0.52084 0.6344719,0.29356 0.9375034,0.61552 0.3125004,0.31251 0.5303046,0.96593 0.2178035,0.64393 0.2178035,2.06441 0,1.27839 0.1325759,1.66666 0.132577,0.38826 0.435608,0.54924 0.3125,0.16091 1.240533,0.16091 v 3.0682 h -1.193185 q -1.8465957,0 -2.6231134,-0.4072 -0.7765178,-0.39773 -1.1079581,-1.17426 -0.3314406,-0.76703 -0.3314406,-2.3106 0,-0.34092 0.01894,-0.68183 0.00947,-0.20833 0.00947,-0.42613 0,-1.09849 -0.1988644,-1.56251 -0.1988641,-0.46401 -0.5776531,-0.67234 -0.3693192,-0.20835 -1.0795489,-0.22728 v -3.24805 q 0.729169,0 1.0890185,-0.22727 0.3693194,-0.22728 0.5587139,-0.69129 0.1893945,-0.47348 0.1893945,-1.59092 v -0.32194 q -0.00947,-0.21784 -0.00947,-0.43563 0,-1.67614 0.2746221,-2.42423 0.2840919,-0.74811 0.7765176,-1.14586 0.3693192,-0.30302 1.0037903,-0.45454 0.8428066,-0.19886 1.9223546,-0.19886 z m 2.05256,0 v 3.10607 h 0.426138 q 0.596593,0 0.890155,0.25568 0.303031,0.24621 0.426137,0.76705 0.06629,0.28409 0.07576,1.5625 0.0095,1.26895 0.265154,1.99811 0.189394,0.55871 0.539775,0.89962 0.26515,0.25569 0.871214,0.52084 -0.634473,0.29356 -0.946972,0.61552 -0.303032,0.31251 -0.520835,0.96593 -0.217804,0.64393 -0.217804,2.06441 0,1.27839 -0.132577,1.66666 -0.132577,0.38826 -0.445077,0.54924 -0.303031,0.16091 -1.231065,0.16091 v 3.0682 h 1.193186 q 1.846596,0 2.623115,-0.4072 0.776517,-0.39773 1.107958,-1.17426 0.331439,-0.76703 0.331439,-2.3106 0,-0.34092 -0.01894,-0.68183 -0.0095,-0.20833 -0.0095,-0.42613 0,-1.09849 0.198865,-1.56251 0.198863,-0.46401 0.568184,-0.67234 0.378788,-0.20835 1.089017,-0.22728 v -3.24805 q -0.729169,0 -1.098487,-0.22727 -0.359851,-0.22728 -0.549245,-0.69129 -0.189395,-0.47348 -0.189395,-1.59092 v -0.32194 q 0.0095,-0.21784 0.0095,-0.43563 0,-1.67614 -0.284093,-2.42423 -0.274622,-0.74811 -0.767046,-1.14586 -0.369321,-0.30302 -1.003791,-0.45454 -0.842806,-0.19886 -1.922355,-0.19886 z"
+         id="text416"
+         aria-label="{ }" /><text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19.8856px;line-height:1;font-family:Arial;-inkscape-font-specification:Arial;text-align:start;letter-spacing:0.055928px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#ff6600;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-dasharray:none"
+         x="4.068121"
+         y="217.89618"
+         id="text68"><tspan
+           sodipodi:role="line"
+           id="tspan68"
+           x="4.068121"
+           y="217.89618"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#ff6600;fill-opacity:1;stroke:#676767;stroke-width:0;stroke-dasharray:none;stroke-opacity:1">{<tspan
+   style="font-size:6.66667px"
+   id="tspan69"> </tspan>}</tspan></text></g><text
+       xml:space="preserve"
+       id="text6"
+       style="fill:#ffff00;font-size:10.66666667px;-inkscape-font-specification:Arial;font-family:Arial;line-height:1;stroke-width:5;text-orientation:auto;fill-opacity:0;stroke:#000000;font-weight:normal;text-align:start;writing-mode:lr-tb;direction:ltr;font-style:normal;font-stretch:normal;font-variant:normal;letter-spacing:0.03px;white-space:pre;shape-inside:url(#rect67)" /></g><g
      inkscape:label="hero"
      inkscape:groupmode="layer"
      id="layer1"
@@ -4990,25 +5043,25 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:semi-condensed;font-size:1.33333px;line-height:1.1;font-family:'Lucida Console';-inkscape-font-specification:'Lucida Console Semi-Condensed';text-align:center;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect414);display:inline;fill:#1a1a1a;stroke-width:5"><tspan
          x="27.305688"
          y="73.336208"
-         id="tspan2">var resourceGroup = new 
+         id="tspan1">var resourceGroup = new 
 </tspan><tspan
          x="21.280312"
          y="74.802868"
-         id="tspan3">Azure.Core.ResourceGroup(&quot;my-resource-g</tspan></text><text
+         id="tspan6">Azure.Core.ResourceGroup(&quot;my-resource-g</tspan></text><text
        xml:space="preserve"
        transform="matrix(-1.0000235,0,0,-1,131.23056,134.36728)"
        id="text414-7"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:semi-condensed;font-size:1.33333px;line-height:1.1;font-family:'Lucida Console';-inkscape-font-specification:'Lucida Console Semi-Condensed';text-align:center;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect414-9);display:inline;fill:#1a1a1a;stroke-width:5"><tspan
          x="27.70738"
          y="73.336208"
-         id="tspan4">var resourceGroup = new </tspan><tspan
+         id="tspan7">var resourceGroup = new </tspan><tspan
          x="18.46847"
          y="74.802868"
-         id="tspan5">Azure.Core.ResourceGroup(&quot;my-resource-group&quot;);
+         id="tspan8">Azure.Core.ResourceGroup(&quot;my-resource-group&quot;);
 </tspan><tspan
          x="17.665087"
          y="76.269527"
-         id="tspan16">var groupName = resourceGroup.Name.Apply(name =&gt; </tspan></text><g
+         id="tspan9">var groupName = resourceGroup.Name.Apply(name =&gt; </tspan></text><g
        id="g2"
        transform="translate(128.00342,-100)"
        style="display:inline;stroke-width:1.00001"><path
@@ -9904,17 +9957,17 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:semi-condensed;font-size:1.33333px;line-height:1.1;font-family:'Lucida Console';-inkscape-font-specification:'Lucida Console Semi-Condensed';text-align:center;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect414-2);display:inline;fill:#1a1a1a;stroke-width:5"><tspan
          x="27.70738"
          y="73.336208"
-         id="tspan17">var resourceGroup = new </tspan><tspan
+         id="tspan10">var resourceGroup = new </tspan><tspan
          x="18.46847"
          y="74.802868"
-         id="tspan18">Azure.Core.ResourceGroup(&quot;my-resource-group&quot;);
+         id="tspan11">Azure.Core.ResourceGroup(&quot;my-resource-group&quot;);
 </tspan><tspan
          x="17.665087"
          y="76.269527"
-         id="tspan19">var groupName = resourceGroup.Name.Apply(name =&gt; </tspan><tspan
+         id="tspan12">var groupName = resourceGroup.Name.Apply(name =&gt; </tspan><tspan
          x="24.092154"
          y="77.736187"
-         id="tspan20">$&quot;Resource Group Name: {name}&quot;);
+         id="tspan13">$&quot;Resource Group Name: {name}&quot;);
 </tspan></text><text
        xml:space="preserve"
        transform="matrix(-1.0000235,0,0,-1,259.23398,134.36728)"
@@ -9922,21 +9975,21 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:semi-condensed;font-size:1.33333px;line-height:1.1;font-family:'Lucida Console';-inkscape-font-specification:'Lucida Console Semi-Condensed';text-align:center;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect414-9-8);display:inline;fill:#1a1a1a;stroke-width:5"><tspan
          x="27.70738"
          y="73.336208"
-         id="tspan21">var resourceGroup = new </tspan><tspan
+         id="tspan14">var resourceGroup = new </tspan><tspan
          x="18.46847"
          y="74.802868"
-         id="tspan22">Azure.Core.ResourceGroup(&quot;my-resource-group&quot;);
+         id="tspan15">Azure.Core.ResourceGroup(&quot;my-resource-group&quot;);
 </tspan><tspan
          x="17.665087"
          y="76.269527"
-         id="tspan23">var groupName = resourceGroup.Name.Apply(name =&gt; </tspan><tspan
+         id="tspan16">var groupName = resourceGroup.Name.Apply(name =&gt; </tspan><tspan
          x="24.092154"
          y="77.736187"
-         id="tspan24">$&quot;Resource Group Name: {name}&quot;);
+         id="tspan17">$&quot;Resource Group Name: {name}&quot;);
 </tspan><tspan
          x="30.11753"
          y="79.202846"
-         id="tspan25">return groupName;</tspan></text></g><g
+         id="tspan18">return groupName;</tspan></text></g><g
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="tiles"><g

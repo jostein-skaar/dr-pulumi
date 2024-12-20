@@ -9,6 +9,7 @@ export class MainScene extends Phaser.Scene {
 	cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
 	hero!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 	enemyGroup!: Phaser.Physics.Arcade.Group;
+	bulletGroup!: Phaser.Physics.Arcade.Group;
 
 	settings = {
 		walkVelocity: adjustForPixelRatio(200),
@@ -20,6 +21,7 @@ export class MainScene extends Phaser.Scene {
 		maxEnemies: 10000,
 		minimapSize: adjustForPixelRatio((32 * 32) / 10),
 		minimapZoom: 0.1,
+		bulletSpeed: adjustForPixelRatio(400),
 	};
 
 	control = {
@@ -43,6 +45,8 @@ export class MainScene extends Phaser.Scene {
 	slackingInterval = 0;
 	losingText!: GameObjects.Text;
 	scoreText!: GameObjects.Text;
+	isShooting = false;
+	shootingInterval = 0;
 
 	constructor() {
 		super("main-scene");
@@ -170,7 +174,7 @@ export class MainScene extends Phaser.Scene {
 			});
 
 		const buttonShoot = this.add
-			.text(shootPositionX, shootPositionY, "⚡", {
+			.text(shootPositionX, shootPositionY, "{}", {
 				padding: { x: adjustForPixelRatio(5), y: adjustForPixelRatio(5) },
 				fontSize: fontSizeCursorButtons,
 				color: "#222",
@@ -272,6 +276,30 @@ export class MainScene extends Phaser.Scene {
 		};
 
 		this.enemyGroup = this.physics.add.group();
+		this.bulletGroup = this.physics.add.group();
+
+		this.physics.add.collider(
+			this.bulletGroup,
+			this.enemyGroup,
+			// @ts-ignore
+			(
+				bullet: Phaser.Physics.Arcade.Image,
+				enemy: Phaser.Physics.Arcade.Image,
+			) => {
+				// const visibilityMargin = adjustForPixelRatio(10);
+				// if (enemy.y < -enemy.width / 2 + visibilityMargin) {
+				// 	return;
+				// }
+				// Sometimes it hits two enemies at the same time. Only one of them should disappear.
+				if (!bullet.visible) {
+					return;
+				}
+				bullet.disableBody(true, true);
+				// TODO: explode enemy
+				enemy.disableBody(true, true);
+				this.score += 1;
+			},
+		);
 
 		this.addEnemies();
 
@@ -297,15 +325,6 @@ export class MainScene extends Phaser.Scene {
 		// // Fun, but to
 		// this.physics.add.collider(this.enemyGroup, this.enemyGroup);
 		this.physics.add.collider(this.enemyGroup, this.hero);
-
-		// this.physics.add.overlap(
-		// 	this.hero,
-		// 	this.enemyGroup,
-		// 	// @ts-expect-error(TODO: Need to find out how to fix this)
-		// 	(_hero, enemy: Phaser.Types.Physics.Arcade.ImageWithStaticBody) => {
-		// 		this.killEnemy(enemy);
-		// 	},
-		// );
 
 		this.losingText = this.add
 			.text(this.width / 2, this.height / 4, "HEY!\nFix the\nproblems!", {
@@ -381,12 +400,27 @@ export class MainScene extends Phaser.Scene {
 			this.hero.setAngle(0);
 			this.hasStopped = false;
 		} else if (this.control.shoot) {
-			console.log("shoot");
 			this.hasStopped = false;
 		} else {
 			this.hero.setVelocityX(0);
 			this.hero.setVelocityY(0);
 			this.hasStopped = true;
+		}
+
+		if (this.control.shoot) {
+			if (this.shootingInterval === 0) {
+				this.fireBullet();
+				// console.log("start shooting interval");
+				this.shootingInterval = setInterval(() => {
+					this.fireBullet();
+				}, 200);
+			}
+		} else {
+			if (this.shootingInterval !== 0) {
+				clearInterval(this.shootingInterval);
+				this.shootingInterval = 0;
+				// console.log("stop shooting interval");
+			}
 		}
 
 		if (this.hasStopped === false) {
@@ -406,7 +440,7 @@ export class MainScene extends Phaser.Scene {
 		if (this.timeSinceStopped > this.settings.slackingTime) {
 			this.lose();
 			if (this.slackingInterval === 0) {
-				console.log("START spawn enemies interval");
+				console.log("start spawn enemies interval");
 				this.slackingInterval = setInterval(() => {
 					console.log("Spawn enemies interval", this.slackingInterval);
 				}, 1000);
@@ -415,7 +449,7 @@ export class MainScene extends Phaser.Scene {
 			if (this.slackingInterval !== 0) {
 				clearInterval(this.slackingInterval);
 				this.slackingInterval = 0;
-				console.log("STOP spawn enemies interval");
+				console.log("stop spawn enemies interval");
 			}
 		}
 
@@ -431,6 +465,20 @@ export class MainScene extends Phaser.Scene {
 		}
 		const text = `Fixed: ${this.score}\nRemaining: ${unsolvedProblems}`;
 		this.scoreText.setText(text);
+
+		// @ts-ignore
+		this.bulletGroup.children.iterate((bullet: Phaser.Physics.Arcade.Image) => {
+			if (
+				bullet.y < 0 ||
+				bullet.x < 0 ||
+				bullet.x > this.worldWidth ||
+				bullet.y > this.worldHeight
+			) {
+				bullet.disableBody(true, true);
+			}
+		});
+
+		// End update loop
 	}
 
 	private resetHeroPosition() {
@@ -485,5 +533,47 @@ export class MainScene extends Phaser.Scene {
 				enemy.setCollideWorldBounds(true);
 			}
 		}
+	}
+
+	private fireBullet() {
+		let bullet: Phaser.Physics.Arcade.Image = this.bulletGroup.getFirstDead();
+
+		const { x, y, angle } = this.hero;
+
+		let velocityX = 0;
+		let velocityY = 0;
+
+		let xTuppen = x;
+		let yTuppen = y;
+
+		if (angle === -180) {
+			velocityY = -this.settings.bulletSpeed;
+			yTuppen = y - this.hero.height / 2;
+		} else if (angle === 90) {
+			velocityX = -this.settings.bulletSpeed;
+			xTuppen = x - this.hero.width / 2;
+		} else if (angle === 0) {
+			velocityY = this.settings.bulletSpeed;
+			yTuppen = y + this.hero.height / 2;
+		} else if (angle === -90) {
+			velocityX = this.settings.bulletSpeed;
+			xTuppen = x + this.hero.width / 2;
+		}
+
+		if (bullet) {
+			bullet.enableBody(true, xTuppen, yTuppen, true, true);
+		} else {
+			bullet = this.bulletGroup.create(
+				xTuppen,
+				yTuppen,
+				"sprites",
+				"bullet-001.png",
+			);
+		}
+
+		// console.log("angle", angle);
+		// console.log("velocityX", velocityX, "velocityY", velocityY);
+
+		bullet.setImmovable(true).setVelocity(velocityX, velocityY).setAngle(angle);
 	}
 }

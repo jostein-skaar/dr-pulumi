@@ -115,27 +115,6 @@
 					}
 				},
 				{
-					"filename": "tiles-002.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 32,
-						"h": 32
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 32,
-						"h": 32
-					},
-					"frame": {
-						"x": 299,
-						"y": 1,
-						"w": 32,
-						"h": 32
-					}
-				},
-				{
 					"filename": "enemies-001.png",
 					"rotated": false,
 					"trimmed": false,
@@ -155,6 +134,48 @@
 						"w": 24,
 						"h": 24
 					}
+				},
+				{
+					"filename": "bullet-001.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 24,
+						"h": 24
+					},
+					"spriteSourceSize": {
+						"x": 2,
+						"y": 1,
+						"w": 20,
+						"h": 22
+					},
+					"frame": {
+						"x": 291,
+						"y": 35,
+						"w": 20,
+						"h": 22
+					}
+				},
+				{
+					"filename": "tiles-002.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 32,
+						"h": 32
+					},
+					"frame": {
+						"x": 299,
+						"y": 1,
+						"w": 32,
+						"h": 32
+					}
 				}
 			]
 		}
@@ -162,6 +183,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:f79301c996e0d65c30de3add96cf1d57:2900deb8798da82aeab8b53531dc285b:4a9bf2ba9afc2827dfa178a3fc41fa73$"
+		"smartupdate": "$TexturePacker:SmartUpdate:45907739014e2c2388ff1c7fa2f2ab9e:aa90b2f96d149992831bf6142f00be2f:4a9bf2ba9afc2827dfa178a3fc41fa73$"
 	}
 }
