@@ -285,6 +285,7 @@ export class MainScene extends Phaser.Scene {
 		this.hero.setCollideWorldBounds(true);
 		console.log("hero", this.hero.height, this.hero.width);
 
+
 		this.hero.anims.create({
 			key: "stand",
 			frames: [
@@ -301,15 +302,16 @@ export class MainScene extends Phaser.Scene {
 
 		this.physics.add.collider(this.hero, this.platformGroup);
 		this.physics.add.collider(this.enemyGroup, this.platformGroup);
+		this.physics.add.collider(this.enemyGroup, this.hero);
 
-		this.physics.add.overlap(
-			this.hero,
-			this.enemyGroup,
-			// @ts-expect-error(TODO: Need to find out how to fix this)
-			(_hero, enemy: Phaser.Types.Physics.Arcade.ImageWithStaticBody) => {
-				this.killEnemy(enemy);
-			},
-		);
+		// this.physics.add.overlap(
+		// 	this.hero,
+		// 	this.enemyGroup,
+		// 	// @ts-expect-error(TODO: Need to find out how to fix this)
+		// 	(_hero, enemy: Phaser.Types.Physics.Arcade.ImageWithStaticBody) => {
+		// 		this.killEnemy(enemy);
+		// 	},
+		// );
 
 		this.losingText = this.add
 		.text(this.width / 2, this.height / 4, 'HEY!\nFix the\nproblems!', {
@@ -348,6 +350,10 @@ export class MainScene extends Phaser.Scene {
 	this.hasLost = false;
 	this.score = 0;
 	this.timeSinceStopped = 0;
+
+	setInterval(() => {
+		this.spawnNewEnemy(true);
+	}, 2000);
 	}
 
 	update(_time: number, delta: number): void {
@@ -432,7 +438,7 @@ export class MainScene extends Phaser.Scene {
 		this.hero.setPosition(
 			this.worldWidth / 2 - this.hero.width / 2,
 			this.worldHeight / 2 - this.hero.height / 2,
-		);
+		).setAngle(180);
 	}
 
 	private addPlatforms() {
@@ -464,5 +470,20 @@ export class MainScene extends Phaser.Scene {
 		this.losingText.setVisible(false);
 
 		this.scene.launch('lost-scene');
+	}
+
+	private spawnNewEnemy(isFirst = false) {
+		let enemy: Phaser.Physics.Arcade.Image = this.enemyGroup.getFirstDead();
+		const x = this.hero.x;
+		const y = this.hero.y - this.hero.height*3;
+		if(enemy) {
+			enemy.enableBody(true, x, y, true, true);
+		}
+		else {
+			enemy = this.enemyGroup.create(x, y, 'sprites', 'enemies-001.png');
+		enemy.setCollideWorldBounds(true);
+		}
+
+		
 	}
 }
