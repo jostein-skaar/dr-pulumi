@@ -174,7 +174,7 @@ export class MainScene extends Phaser.Scene {
 			});
 
 		const buttonShoot = this.add
-			.text(shootPositionX, shootPositionY, "{}", {
+			.text(shootPositionX, shootPositionY, "⚡", {
 				padding: { x: adjustForPixelRatio(5), y: adjustForPixelRatio(5) },
 				fontSize: fontSizeCursorButtons,
 				color: "#222",
