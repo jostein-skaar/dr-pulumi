@@ -48,6 +48,7 @@ export class MainScene extends Phaser.Scene {
 	scoreText!: GameObjects.Text;
 	isShooting = false;
 	shootingInterval = 0;
+	emitter!: GameObjects.Particles.ParticleEmitter;
 
 	constructor() {
 		super("main-scene");
@@ -296,8 +297,8 @@ export class MainScene extends Phaser.Scene {
 					return;
 				}
 				bullet.disableBody(true, true);
-				// TODO: explode enemy
-				enemy.disableBody(true, true);
+				// @ts-ignore
+				this.killEnemy(enemy);
 				this.score += 1;
 			},
 		);
@@ -379,6 +380,15 @@ export class MainScene extends Phaser.Scene {
 				this.spawnNewEnemy(false);
 			}, this.settings.enemySpawnInterval);
 		}, 1000);
+
+		this.emitter = this.add.particles(0, 0, "sprites", {
+			frame: "enemies-001.png",
+			scale: { start: 0.8, end: 0 },
+			speed: { min: 200, max: 400 },
+			lifespan: 200,
+			quantity: 25,
+			active: false,
+		});
 	}
 
 	update(_time: number, delta: number): void {
@@ -501,7 +511,11 @@ export class MainScene extends Phaser.Scene {
 	}
 
 	private killEnemy(enemy: Phaser.Types.Physics.Arcade.ImageWithStaticBody) {
-		enemy.destroy();
+		enemy.disableBody(true, true);
+		const bounds = enemy.getBounds();
+		this.emitter.setPosition(bounds.left, bounds.top);
+		this.emitter.active = true;
+		this.emitter.explode();
 	}
 
 	private lose() {
