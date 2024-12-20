@@ -518,7 +518,6 @@ export class MainScene extends Phaser.Scene {
 
 		this.hasLost = true;
 		this.scene.pause();
-		this.hero.setTint(0xff0000);
 		this.cameras.main.setBackgroundColor(0xbababa);
 		this.cameras.main.setAlpha(0.5);
 		this.losingText.setVisible(false);
